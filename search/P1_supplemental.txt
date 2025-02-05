@@ -13,16 +13,52 @@ QS3.1:
 
 
 
-QS4.1:
+QS4.1: 
+
+The nullHeuristic is a function that returns 0 for every state and provides no information about how far away the goal is.
+The Manhattan distance heuristic calculates the distance from the current state to the goal and makes an informed estimate of the remaining distance to the goal.
+The nullHeuristic is optimal because it uses A* which is optimal; however, it is not nearly as efficient because it will explore more nodes.
+Since the Manhattan heuristic is both admissible and consistent like the nullHeuristic, it is better and more efficient because it does not have to expand nearly as many nodes, greatly speeding up the search.
 
 
 QS5.1:
 
+Each state is represented as a tuple with two tuples inside, one representing the (x, y) coordinates
+and the other detailing which corners have been visited using a Boolean value (e.g. (False, False, False, False)).
 
 QS5.2:
 
+When the getStartState function is called, the state state is constructed as a tuple. The isGoalState function determines whether
+all four corners have been visited by using the built in all() function to check if all values in the visitedCorners tuple are True.
+
+The getSuccessors() function looks at the current state and determines what the possible moves Pacman could take without running into a wall.
+It calculates the new (x, y) coordinates and also determines which of the four corners will have been visited if that path is taken. That is then
+added to the list of successors. 
 
 QS6.1:
 
+The heuristic chosen here is the Manhattan distance heuristic. Some advantages of the Manhattan heuristic are that it is computationally
+inexpensive to compute the distances and it never overestimates the true cost (so it's admissable). 
+
+One potential disadvantage is that it doesn't consider the order of the corners. It only goes to the one that is furthest away. 
+It doesn't consider that, once Pacman has visited one corner, it still has to visit the others. 
+
+Yes, the heuristic is consistent because is adheres to the triangle inequality. 
 
 QS7.1:
+
+The heuristic computes the maze distance from Pacman's current position to every remaining food dot and returns the maximum of these distances.
+That distance is then used as the estimate. 
+
+The heuristic is both admissable and consistent, and it considers paths that will eventually lead to hard-to-reach areas.
+
+However, repeatedly calculating maze distances can be computationally expensive. It also doesn't consider the order in which the food dots
+will be collected. Therefore there is the risk that the cost will be significantly underestimated. 
+
+QS8.1:
+
+BFS is used as our heuristic because it is complete and optimal on unweighted graphs, so it can find the shortest distance to the food.
+
+Some advantages of using BFS are that it guarantees the shortest path and it is easy to implement. 
+
+However, it can be computationally expensive and might explore many more nodes than other heuristics like Manhattan distance might.

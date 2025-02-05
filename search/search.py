@@ -91,8 +91,33 @@ def depthFirstSearch(problem: SearchProblem):
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # Initialize the queue with the starting state and an empty action list
+    startState = problem.getStartState()
+    frontier = util.Queue()
+    frontier.push((startState, []))  # (state, actions)
+
+    # Track visited states to avoid revisiting them
+    visited = set()
+    visited.add(startState)
+
+    while not frontier.isEmpty():
+        # Get the next node from the queue
+        currentState, actions = frontier.pop()
+
+        # Check if the current state is the goal
+        if problem.isGoalState(currentState):
+            return actions
+
+        # Generate successors
+        for successor, action, _ in problem.getSuccessors(currentState):
+            if successor not in visited:
+                # Mark the successor as visited
+                visited.add(successor)
+                # Add the successor to the queue with the updated action list
+                frontier.push((successor, actions + [action]))
+
+    # If no solution is found, return an empty list
+    return []
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
@@ -108,8 +133,36 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # Initialize the priority queue with the starting state
+    startState = problem.getStartState()
+    frontier = util.PriorityQueue()
+    frontier.push((startState, [], 0), 0)  # (state, actions, cost), priority
+
+    # Track visited states and their costs
+    visited = {}
+    visited[startState] = 0
+
+    while not frontier.isEmpty():
+        # Get the node with the lowest priority (cost + heuristic)
+        currentState, actions, currentCost = frontier.pop()
+
+        # Check if the current state is the goal
+        if problem.isGoalState(currentState):
+            return actions
+
+        # Generate successors
+        for successor, action, stepCost in problem.getSuccessors(currentState):
+            newCost = currentCost + stepCost
+            heuristicCost = heuristic(successor, problem)
+            totalCost = newCost + heuristicCost
+
+            # If the successor hasn't been visited or a better path is found
+            if successor not in visited or newCost < visited[successor]:
+                visited[successor] = newCost
+                frontier.push((successor, actions + [action], newCost), totalCost)
+
+    # If no solution is found
+    return []
 
 
 # Abbreviations
